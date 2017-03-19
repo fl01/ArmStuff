@@ -1,0 +1,9 @@
+﻿{
+  "EndPoints": {
+    "Movement": "http://192.168.1.165:5100/api/movement",
+    "Ping": "http://192.168.1.165:5100/api/ping"
+  },
+  "GPIO": {
+    "PirPinHeaderNum": "3"
+  }
+}

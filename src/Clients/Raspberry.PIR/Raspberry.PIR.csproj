@@ -8,7 +8,38 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="AppConfig.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="AppConfig.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="1.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="1.1.1" />
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Raspberry.IO">
+      <HintPath>..\..\libs\raspberry-sharp-io\Raspberry.IO.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+    <Reference Include="Raspberry.IO.GeneralPurpose">
+      <HintPath>..\..\libs\raspberry-sharp-io\Raspberry.IO.GeneralPurpose.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+    <Reference Include="Raspberry.IO.Interop">
+      <HintPath>..\..\libs\raspberry-sharp-io\Raspberry.IO.Interop.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+    <Reference Include="Raspberry.System">
+      <HintPath>..\..\libs\raspberry-sharp-io\Raspberry.System.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
   </ItemGroup>
 
 </Project>

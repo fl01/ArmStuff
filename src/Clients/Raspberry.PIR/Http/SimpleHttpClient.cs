@@ -1,12 +1,25 @@
 ﻿using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace Raspberry.PIR.Http
 {
     public class SimpleHttpClient : IHttpClient
     {
-        public HttpResponseMessage PostJson<T>(string url, T data)
+        private HttpClient _httpClient;
+
+        public SimpleHttpClient()
+        {
+            _httpClient = new HttpClient();
+        }
+
+        public void Dispose()
+        {
+            _httpClient.Dispose();
+        }
+
+        public Task<HttpResponseMessage> PostJsonAsync<T>(string url, T data)
         {
             if (string.IsNullOrEmpty(url))
             {
@@ -19,12 +32,7 @@ namespace Raspberry.PIR.Http
                 return null;
             }
 
-            using (var client = new HttpClient())
-            {
-                return client.PostAsync(url, new StringContent(serializedData, Encoding.UTF8, "application/json"))
-                    .GetAwaiter()
-                    .GetResult();
-            }
+            return _httpClient.PostAsync(url, new StringContent(serializedData, Encoding.UTF8, "application/json"));
         }
     }
 }

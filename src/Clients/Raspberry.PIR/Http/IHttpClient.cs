@@ -1,9 +1,11 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace Raspberry.PIR.Http
 {
-    public interface IHttpClient
+    public interface IHttpClient : IDisposable
     {
-        HttpResponseMessage PostJson<T>(string url, T data);
+        Task<HttpResponseMessage> PostJsonAsync<T>(string url, T data);
     }
 }
