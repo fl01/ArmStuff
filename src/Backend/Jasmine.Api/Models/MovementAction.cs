@@ -1,20 +1,17 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 
 namespace Jasmine.Api.Models
 {
-    public class MovementChangedData
+    public class MovementAction
     {
-        [Required]
+        public Guid Id { get; set; }
+
         public Guid DeviceId { get; set; }
 
-        [Required]
         public int Value { get; set; }
 
-        [Required]
         public string Sensor { get; set; }
 
-        [Required]
         public DateTime EntryDate { get; set; }
     }
 }

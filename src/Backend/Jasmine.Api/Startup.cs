@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Jasmine.Api.Services;
+using Jasmine.Api.Storage;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using MongoDB.Driver;
 
 namespace Jasmine.Api
 {
@@ -26,6 +25,18 @@ namespace Jasmine.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services
+                .AddSingleton<ISettingsService, SettingsService>()
+                .AddSingleton<IConfigurationRoot>(Configuration)
+                .AddSingleton<IMovementsStorage, MongoMovementsStorage>()
+                .AddTransient<IMovementService, MovementService>()
+                .AddSingleton<IMongoDatabase>(svcProvider =>
+                {
+                    var settingsService = svcProvider.GetService<ISettingsService>();
+                    IMongoClient client = new MongoClient(settingsService.GetConnectionString());
+                    return client.GetDatabase(settingsService.GetMovementsDbName());
+                });
+
             services.AddMvc();
         }
 

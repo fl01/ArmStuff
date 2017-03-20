@@ -6,19 +6,24 @@ namespace Raspberry.PIR.Services.GPIO
 {
     public class RaspberrySharpIoPinService : IPinService
     {
-        private bool _isStatusWatchRunning = false;
+        private bool _IsWatching = false;
         private GpioConnection _pinConnection = null;
-
+        private readonly string _sensor;
         public event EventHandler<PinStatusChangedArgs> OnStatusChanged;
+
+        public RaspberrySharpIoPinService(string sensor)
+        {
+            _sensor = sensor;
+        }
 
         public void BeginStatusWatch()
         {
-            if (_isStatusWatchRunning)
+            if (_IsWatching)
             {
                 return;
             }
 
-            _isStatusWatchRunning = true;
+            _IsWatching = true;
             _pinConnection.PinStatusChanged += (s, args) => OnStateChanged(args);
         }
 
@@ -45,7 +50,7 @@ namespace Raspberry.PIR.Services.GPIO
         {
             Console.WriteLine("State has been changed to " + statusArgs.Enabled);
 
-            OnStatusChanged?.Invoke(this, new PinStatusChangedArgs(statusArgs.Enabled.ToInt32()));
+            OnStatusChanged?.Invoke(this, new PinStatusChangedArgs(_sensor, statusArgs.Enabled.ToInt32()));
         }
     }
 }

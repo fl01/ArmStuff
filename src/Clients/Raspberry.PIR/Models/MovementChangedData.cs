@@ -10,10 +10,13 @@ namespace Raspberry.PIR.Models
 
         public DateTime EntryDate { get; private set; }
 
-        public MovementChangedData(Guid deviceId, int value)
+        public string Sensor { get; private set; }
+
+        public MovementChangedData(Guid deviceId, string sensor, int value)
         {
             DeviceId = deviceId;
             Value = value;
+            Sensor = sensor;
             EntryDate = DateTime.UtcNow;
         }
     }

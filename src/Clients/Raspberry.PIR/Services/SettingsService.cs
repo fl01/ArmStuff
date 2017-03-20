@@ -5,11 +5,13 @@ namespace Raspberry.PIR.Services
 {
     public class SettingsService : ISettingsService
     {
-        private Lazy<Guid> _deviceId = new Lazy<Guid>(Guid.Parse("BB4F1E20-6B52-4EA5-B120-AEFE21894B49"));
+        private Lazy<Guid> _deviceId;
         private IConfigurationRoot _configuration;
 
         public SettingsService()
         {
+            _deviceId = new Lazy<Guid>(Guid.Parse(GetDeviceId()));
+
             var builder = new ConfigurationBuilder()
                 .AddJsonFile("AppConfig.json", optional: false, reloadOnChange: true);
 
@@ -53,6 +55,11 @@ namespace Raspberry.PIR.Services
 
                 return headerNum;
             }
+        }
+
+        private string GetDeviceId()
+        {
+            return _configuration.GetSection("Me")["DeviceId"];
         }
     }
 }
