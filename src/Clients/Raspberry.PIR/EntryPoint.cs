@@ -9,11 +9,12 @@ namespace Raspberry.PIR
     public class EntryPoint
     {
         private static ISettingsService _settingsService;
+
         public static void Main(string[] args)
         {
             Console.WriteLine("Hey. I'm PIR handler.");
 
-            IPinService pinService = new RaspberrySharpIoPinService();
+            IPinService pinService = new RaspberrySharpIoPinService("PIR");
             _settingsService = new SettingsService();
             Console.WriteLine($"Device Id: {_settingsService.DeviceId}");
 
@@ -28,7 +29,7 @@ namespace Raspberry.PIR
 
         private static async void OnMovementChanged(PinStatusChangedArgs args)
         {
-            var movementData = new MovementChangedData(_settingsService.DeviceId, args.Value);
+            var movementData = new MovementChangedData(_settingsService.DeviceId, args.Sensor, args.Value);
             Console.WriteLine($"Movement data will be sent to {_settingsService.MovementEndpointUrl}");
 
             using (IHttpClient httpClient = new SimpleHttpClient())
