@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using Jasmine.Api.Definitions;
 
 namespace Jasmine.Api.Models
 {
@@ -12,7 +13,7 @@ namespace Jasmine.Api.Models
         public int Value { get; set; }
 
         [Required]
-        public string Sensor { get; set; }
+        public SensorType Sensor { get; set; }
 
         [Required]
         public DateTime EntryDate { get; set; }

@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Jasmine.Api.Controllers
 {
-    [Route("api/[controller]")]
     public class MovementController : Controller
     {
         private readonly IMovementService _movementsService;
@@ -16,17 +15,29 @@ namespace Jasmine.Api.Controllers
             _movementsService = movementsService;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Post([FromBody] MovementChangedData movementData)
+        [HttpGet("api/movement/{deviceId:guid}/{page:int}/{limit:int}")]
+        public async Task<IActionResult> GetHistory([FromRoute]Guid deviceId, [FromRoute]int page, [FromRoute]int limit)
+        {
+            if (Guid.Empty.Equals(deviceId))
+            {
+                return BadRequest();
+            }
+
+            MovementHistory history = await _movementsService.GetHistoryForDeviceAsync(deviceId, page, limit);
+            return Ok(history);
+        }
+
+        [HttpPost("api/movement")]
+        public async Task<IActionResult> AddMovementRecord([FromBody] MovementChangedData movementData)
         {
             if (movementData == null || !ModelState.IsValid)
             {
                 return new BadRequestObjectResult(ModelState);
             }
 
-            Console.WriteLine($"{DateTime.UtcNow} Recevied movement change from {movementData.DeviceId}");
+            Console.WriteLine($"{DateTime.UtcNow} Received movement change from {movementData.DeviceId}");
 
-            await _movementsService.AddAsync(movementData);
+            await _movementsService.AddMovementAsync(movementData);
             return Accepted();
         }
     }

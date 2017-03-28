@@ -10,7 +10,7 @@ namespace Raspberry.PIR.Services
 
         public SettingsService()
         {
-            _deviceId = new Lazy<Guid>(Guid.Parse(GetDeviceId()));
+            _deviceId = new Lazy<Guid>(() => Guid.Parse(GetDeviceId()));
 
             var builder = new ConfigurationBuilder()
                 .AddJsonFile("AppConfig.json", optional: false, reloadOnChange: true);

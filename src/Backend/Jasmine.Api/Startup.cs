@@ -28,6 +28,7 @@ namespace Jasmine.Api
             services
                 .AddSingleton<ISettingsService, SettingsService>()
                 .AddSingleton<IConfigurationRoot>(Configuration)
+                .AddTransient<IDeviceService, DeviceService>()
                 .AddSingleton<IMovementsStorage, MongoMovementsStorage>()
                 .AddTransient<IMovementService, MovementService>()
                 .AddSingleton<IMongoDatabase>(svcProvider =>

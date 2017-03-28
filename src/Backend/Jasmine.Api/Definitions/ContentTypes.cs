@@ -1,4 +1,4 @@
-﻿namespace Jasmine.Api.Definitions
+﻿ namespace Jasmine.Api.Definitions
 {
     public static class ContentTypes
     {

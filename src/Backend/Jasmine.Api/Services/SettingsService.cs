@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System;
+using Microsoft.Extensions.Configuration;
 
 namespace Jasmine.Api.Services
 {
@@ -19,6 +20,11 @@ namespace Jasmine.Api.Services
         public string GetMovementsDbName()
         {
             return _configuration.GetConnectionString("MongoDbName");
+        }
+
+        public TimeSpan GetSensorActivityExpiry()
+        {
+            return (TimeSpan)_configuration.GetValue(typeof(TimeSpan), "SensorActivity:ExpiryTime", TimeSpan.FromSeconds(15));
         }
     }
 }
