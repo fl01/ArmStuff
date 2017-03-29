@@ -8,8 +8,14 @@ namespace Raspberry.PIR.Services
 
         int PirHeaderNum { get; }
 
+        int RangeEchoHeaderNum { get; }
+
+        int RangeTriggerHeaderNum { get; }
+
         string MovementEndpointUrl { get; }
 
         string PingEndpointUrl { get; }
+
+        bool PushFalseData { get; }
     }
 }

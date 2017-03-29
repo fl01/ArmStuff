@@ -2,14 +2,14 @@
 {
     public class PinStatusChangedArgs
     {
-        public string Sensor { get; set; }
+        public SensorType Sensor { get; set; }
 
-        public int Value { get; private set; }
+        public bool IsActive { get; private set; }
 
-        public PinStatusChangedArgs(string sensor, int value)
+        public PinStatusChangedArgs(SensorType sensor, bool isActive)
         {
             Sensor = sensor;
-            Value = value;
+            IsActive = isActive;
         }
     }
 }

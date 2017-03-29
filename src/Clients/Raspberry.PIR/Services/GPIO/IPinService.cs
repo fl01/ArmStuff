@@ -7,8 +7,14 @@ namespace Raspberry.PIR.Services.GPIO
     {
         event EventHandler<PinStatusChangedArgs> OnStatusChanged;
 
-        void SetPinUsingHeaderNumber(int header);
+        void SetInputPinUsingHeaderNumber(int header);
 
-        void BeginStatusWatch();
+        void SetOutputPinUsingHeaderNumber(int header);
+
+        void ConnectInput();
+
+        void Toggle();
+
+        void ConnectOutput();
     }
 }

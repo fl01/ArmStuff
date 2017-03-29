@@ -1,12 +1,15 @@
 ﻿{
   "Me": {
-    "DeviceId": "BB4F1E20-6B52-4EA5-B120-AEFE21894B49"
+    "DeviceId": "BB4F1E20-6B52-4EA5-B120-AEFE21894B49",
+    "PushFalseData" : "false"
   },
   "EndPoints": {
     "Movement": "http://192.168.1.165:5100/api/movement",
     "Ping": "http://192.168.1.165:5100/api/ping"
   },
   "GPIO": {
-    "PirPinHeaderNum": "3"
+    "PirPinHeaderNum": "3",
+    "RangeTriggerHeaderNum": "4",
+    "RangeEchoHeaderNum": "6"
   }
 }

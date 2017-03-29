@@ -6,51 +6,74 @@ namespace Raspberry.PIR.Services.GPIO
 {
     public class RaspberrySharpIoPinService : IPinService
     {
-        private bool _IsWatching = false;
-        private GpioConnection _pinConnection = null;
-        private readonly string _sensor;
+        private readonly SensorType _sensor;
+        private readonly ISettingsService _settingsService;
+
+        private ConnectorPin? _inputPin = null;
+        private ConnectorPin? _outputPin = null;
+        private GpioConnection _inputConnection = null;
+        private GpioConnection _outputConnection = null;
+
         public event EventHandler<PinStatusChangedArgs> OnStatusChanged;
 
-        public RaspberrySharpIoPinService(string sensor)
+        public RaspberrySharpIoPinService(ISettingsService settingsService, SensorType sensor)
         {
+            _settingsService = settingsService;
             _sensor = sensor;
         }
 
-        public void BeginStatusWatch()
+        public void ConnectInput()
         {
-            if (_IsWatching)
+            if (_inputPin == null)
             {
-                return;
+                Console.WriteLine("Invalid pin");
             }
 
-            _IsWatching = true;
-            _pinConnection.PinStatusChanged += (s, args) => OnStateChanged(args);
+            _inputConnection = new GpioConnection(_inputPin.GetValueOrDefault().Input());
+            _inputConnection.PinStatusChanged += (s, args) => OnInputStateChanged(args);
+            Console.WriteLine($"{_sensor} - {_inputPin} - initialized");
         }
 
-        public void SetPinUsingHeaderNumber(int header)
+        public void SetInputPinUsingHeaderNumber(int header)
         {
-            if (_pinConnection != null)
-            {
-                (_pinConnection as IDisposable)?.Dispose();
-                _pinConnection = null;
-            }
-
             if (!Enum.IsDefined(typeof(ConnectorPin), header))
             {
                 throw new ArgumentException("Invalid header number");
             }
 
-            var pin = (ConnectorPin)header;
-            _pinConnection = new GpioConnection(pin.Input());
-
-            Console.WriteLine("PinConnection has been set");
+            _inputPin = (ConnectorPin)header;
         }
 
-        private void OnStateChanged(PinStatusEventArgs statusArgs)
+        public void SetOutputPinUsingHeaderNumber(int header)
         {
-            Console.WriteLine("State has been changed to " + statusArgs.Enabled);
+            if (!Enum.IsDefined(typeof(ConnectorPin), header))
+            {
+                throw new ArgumentException("Invalid header number");
+            }
 
-            OnStatusChanged?.Invoke(this, new PinStatusChangedArgs(_sensor, statusArgs.Enabled.ToInt32()));
+            _outputPin = (ConnectorPin)header;
+        }
+
+        public void Toggle()
+        {
+            _outputConnection.Toggle(_outputPin.GetValueOrDefault());
+        }
+
+        public void ConnectOutput()
+        {
+            if (_outputPin == null)
+            {
+                Console.WriteLine("Invalid pin");
+            }
+
+            _outputConnection = new GpioConnection(_outputPin.GetValueOrDefault().Output());
+        }
+
+        private void OnInputStateChanged(PinStatusEventArgs statusArgs)
+        {
+            Console.WriteLine($"{_sensor} - state has been changed to " + statusArgs.Enabled);
+
+            OnStatusChanged?.Invoke(this, new PinStatusChangedArgs(_sensor, statusArgs.Enabled));
         }
     }
 }

@@ -42,15 +42,56 @@ namespace Raspberry.PIR.Services
             }
         }
 
+        public bool PushFalseData
+        {
+            get
+            {
+                string raw = _configuration.GetSection("Me")["PushFalseData"];
+                if (!bool.TryParse(raw, out bool pushFalseData))
+                {
+                    Console.WriteLine($"Invalid value of {nameof(PushFalseData)}");
+                }
+
+                return pushFalseData;
+            }
+        }
+
         public int PirHeaderNum
         {
             get
             {
                 string rawNum = _configuration.GetSection("GPIO")["PirPinHeaderNum"];
-                int headerNum;
-                if (!int.TryParse(rawNum, out headerNum))
+                if (!int.TryParse(rawNum, out int headerNum))
                 {
                     Console.WriteLine($"Invalid value of {nameof(PirHeaderNum)}");
+                }
+
+                return headerNum;
+            }
+        }
+
+        public int RangeEchoHeaderNum
+        {
+            get
+            {
+                string rawNum = _configuration.GetSection("GPIO")["RangeEchoHeaderNum"];
+                if (!int.TryParse(rawNum, out int headerNum))
+                {
+                    Console.WriteLine($"Invalid value of {nameof(RangeEchoHeaderNum)}");
+                }
+
+                return headerNum;
+            }
+        }
+
+        public int RangeTriggerHeaderNum
+        {
+            get
+            {
+                string rawNum = _configuration.GetSection("GPIO")["RangeTriggerHeaderNum"];
+                if (!int.TryParse(rawNum, out int headerNum))
+                {
+                    Console.WriteLine($"Invalid value of {nameof(RangeTriggerHeaderNum)}");
                 }
 
                 return headerNum;
