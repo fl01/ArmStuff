@@ -10,7 +10,6 @@ namespace Raspberry.PIR.Services
     {
         private Dictionary<SensorType, IPinService> _sensors;
         private readonly ISettingsService _settingsService;
-        private double rangeEchoBegin;
 
         public MovementService(ISettingsService settingsService)
         {
@@ -21,7 +20,6 @@ namespace Raspberry.PIR.Services
         public void Initialize()
         {
             InitalizePirSensor(_sensors[SensorType.PIR]);
-            InitalizeRangeSensor(_sensors[SensorType.Range]);
         }
 
         public void SetSensor(SensorType sensor, IPinService pinService)
@@ -38,21 +36,13 @@ namespace Raspberry.PIR.Services
                 return;
             }
 
-            sensorService.OnStatusChanged += (s, e) => OnPirStatusChanged(e);
+            sensorService.OnInputStatusChanged += (s, e) => OnPirStatusChanged(e);
             sensorService.ConnectInput();
         }
 
         private void OnPirStatusChanged(PinStatusChangedArgs e)
         {
-            // TODO : uncomment once range sensor is fixed
-            //PushPirDataToServer(e);
-
-            if (e.IsActive)
-            {
-                Console.WriteLine($"Toggle begin");
-                _sensors[SensorType.Range].Toggle();
-                Console.WriteLine($"Toggle end");
-            }
+            PushPirDataToServer(e);
         }
 
         private async void PushPirDataToServer(PinStatusChangedArgs args)
@@ -68,40 +58,6 @@ namespace Raspberry.PIR.Services
                     Console.WriteLine("Done");
                 }
             }
-        }
-
-        private void InitalizeRangeSensor(IPinService sensorService)
-        {
-            if (sensorService == null)
-            {
-                Console.WriteLine("WARNING: Missing Range sensor service");
-                return;
-            }
-
-            sensorService.OnStatusChanged += (s, e) => OnRangeEchoStatusChanged(e);
-            sensorService.ConnectOutput();
-            sensorService.ConnectInput();
-            Console.WriteLine("Range initialized");
-        }
-
-        private void OnRangeEchoStatusChanged(PinStatusChangedArgs e)
-        {
-            if (e.IsActive)
-            {
-                rangeEchoBegin = GetUnixTimeStamp();
-            }
-            else
-            {
-                double distance = Math.Round((GetUnixTimeStamp() - rangeEchoBegin) * 17150, 2);
-                Console.WriteLine("Distance = " + distance);
-            }
-
-            Console.WriteLine(DateTime.UtcNow + " Range Echo Status - " + e.IsActive);
-        }
-
-        private double GetUnixTimeStamp()
-        {
-            return (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
         }
     }
 }

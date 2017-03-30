@@ -20,12 +20,6 @@ namespace Raspberry.PIR
             IPinService pirSensor = new RaspberrySharpIoPinService(_settingsService, SensorType.PIR);
             pirSensor.SetInputPinUsingHeaderNumber(_settingsService.PirHeaderNum);
             _movementService.SetSensor(SensorType.PIR, pirSensor);
-
-            IPinService rangeSensor = new RaspberrySharpIoPinService(_settingsService, SensorType.Range);
-            rangeSensor.SetInputPinUsingHeaderNumber(_settingsService.RangeEchoHeaderNum);
-            rangeSensor.SetOutputPinUsingHeaderNumber(_settingsService.RangeTriggerHeaderNum);
-            _movementService.SetSensor(SensorType.Range, rangeSensor);
-
             _movementService.Initialize();
             Console.WriteLine("Initialized");
 

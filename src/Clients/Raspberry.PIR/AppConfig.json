@@ -4,12 +4,12 @@
     "PushFalseData" : "false"
   },
   "EndPoints": {
-    "Movement": "http://192.168.1.165:5100/api/movement",
-    "Ping": "http://192.168.1.165:5100/api/ping"
+    "Movement": "http://192.168.1.165:5100/api/movement"
+  },
+  "Auth": {
+    "AuthCode": "12345678-1234-1234-1234-123456789012"
   },
   "GPIO": {
-    "PirPinHeaderNum": "3",
-    "RangeTriggerHeaderNum": "4",
-    "RangeEchoHeaderNum": "6"
+    "PirPinHeaderNum": "3"
   }
 }

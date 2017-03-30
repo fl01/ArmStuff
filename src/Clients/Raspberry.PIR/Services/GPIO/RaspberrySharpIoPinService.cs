@@ -10,11 +10,9 @@ namespace Raspberry.PIR.Services.GPIO
         private readonly ISettingsService _settingsService;
 
         private ConnectorPin? _inputPin = null;
-        private ConnectorPin? _outputPin = null;
         private GpioConnection _inputConnection = null;
-        private GpioConnection _outputConnection = null;
 
-        public event EventHandler<PinStatusChangedArgs> OnStatusChanged;
+        public event EventHandler<PinStatusChangedArgs> OnInputStatusChanged;
 
         public RaspberrySharpIoPinService(ISettingsService settingsService, SensorType sensor)
         {
@@ -44,36 +42,11 @@ namespace Raspberry.PIR.Services.GPIO
             _inputPin = (ConnectorPin)header;
         }
 
-        public void SetOutputPinUsingHeaderNumber(int header)
-        {
-            if (!Enum.IsDefined(typeof(ConnectorPin), header))
-            {
-                throw new ArgumentException("Invalid header number");
-            }
-
-            _outputPin = (ConnectorPin)header;
-        }
-
-        public void Toggle()
-        {
-            _outputConnection.Toggle(_outputPin.GetValueOrDefault());
-        }
-
-        public void ConnectOutput()
-        {
-            if (_outputPin == null)
-            {
-                Console.WriteLine("Invalid pin");
-            }
-
-            _outputConnection = new GpioConnection(_outputPin.GetValueOrDefault().Output());
-        }
-
         private void OnInputStateChanged(PinStatusEventArgs statusArgs)
         {
             Console.WriteLine($"{_sensor} - state has been changed to " + statusArgs.Enabled);
 
-            OnStatusChanged?.Invoke(this, new PinStatusChangedArgs(_sensor, statusArgs.Enabled));
+            OnInputStatusChanged?.Invoke(this, new PinStatusChangedArgs(_sensor, statusArgs.Enabled));
         }
     }
 }

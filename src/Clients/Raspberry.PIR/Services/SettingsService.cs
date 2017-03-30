@@ -34,11 +34,16 @@ namespace Raspberry.PIR.Services
             }
         }
 
-        public string PingEndpointUrl
+        public Guid AuthCode
         {
             get
             {
-                return _configuration.GetSection("Endpoints")["Ping"];
+                if (!Guid.TryParse(_configuration.GetSection("Auth:")["AuthCode"], out Guid code))
+                {
+                    Console.WriteLine($"Invalid value of {nameof(AuthCode)}");
+                }
+
+                return code;
             }
         }
 
@@ -64,34 +69,6 @@ namespace Raspberry.PIR.Services
                 if (!int.TryParse(rawNum, out int headerNum))
                 {
                     Console.WriteLine($"Invalid value of {nameof(PirHeaderNum)}");
-                }
-
-                return headerNum;
-            }
-        }
-
-        public int RangeEchoHeaderNum
-        {
-            get
-            {
-                string rawNum = _configuration.GetSection("GPIO")["RangeEchoHeaderNum"];
-                if (!int.TryParse(rawNum, out int headerNum))
-                {
-                    Console.WriteLine($"Invalid value of {nameof(RangeEchoHeaderNum)}");
-                }
-
-                return headerNum;
-            }
-        }
-
-        public int RangeTriggerHeaderNum
-        {
-            get
-            {
-                string rawNum = _configuration.GetSection("GPIO")["RangeTriggerHeaderNum"];
-                if (!int.TryParse(rawNum, out int headerNum))
-                {
-                    Console.WriteLine($"Invalid value of {nameof(RangeTriggerHeaderNum)}");
                 }
 
                 return headerNum;

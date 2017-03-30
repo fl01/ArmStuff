@@ -4,6 +4,9 @@ import os.path
 import json
 from json import JSONEncoder
 import requests
+import signal
+import sys
+import RPi.GPIO as GPIO
 
 ConfigFilePath = os.path.join(os.path.dirname(__file__), 'config.cfg')
 
@@ -17,9 +20,40 @@ class HttpClient:
 	requests.post(cfg.Endpoint, json.dumps(data), headers = {'Content-type':'application/json', 'Code':cfg.Code})
 
 class RangeChecker:
-  def IsEmpty(self, config):
-	# TODO
-	return False
+  def IsEmpty(self, cfg):
+	GPIO.output(cfg.TriggerPin, True)
+	time.sleep(0.00001)
+	GPIO.output(cfg.TriggerPin, False)
+
+	while GPIO.input(cfg.EchoPin)==0:
+		pulse_start = time.time()
+
+	while GPIO.input(cfg.EchoPin)==1:
+		pulse_end = time.time()
+
+	pulse_duration = pulse_end - pulse_start
+	print ('Pulse duration - ' + str(pulse_duration))
+	distance = round(pulse_duration * 17150, 2)
+	
+	# some time range lags. most likely it is caused by chinese sensor, but who knows
+	if distance > 1000:
+		return False    
+
+	print ('Distance - ' + str(distance))
+	diff = abs(cfg.SpareWcRange - distance);
+	print ('Difference cm - ' + str(diff))
+	diffPercent = diff / cfg.SpareWcRange * 100;
+	print ('Difference % - ' + str(diffPercent))
+	isEmpty = diffPercent < cfg.MaxRangeDifference;
+	print ('Is Empty = ' + str(isEmpty) + "Max Diff Percent - " + str(cfg.MaxRangeDifference))
+	return isEmpty
+
+  def Setup(self, cfg):
+	GPIO.setmode(GPIO.BCM)
+	GPIO.setup(cfg.TriggerPin, GPIO.OUT)
+	GPIO.setup(cfg.EchoPin, GPIO.IN)
+	GPIO.output(cfg.TriggerPin, False)
+	time.sleep(2)
 	
 class Config:
   Endpoint = ""
@@ -47,11 +81,19 @@ class Config:
 		self.SensorType = int(keyValues['SensorType'])
 		self.Code = keyValues['Code']
 		self.LastUpdateTime = time.time()
-		
-sensor = RangeChecker()
-cfg = Config()
 
+def signal_handler(signal, frame):	
+	print('You pressed Ctrl+C!')
+	GPIO.cleanup()
+	sys.exit(0)
+
+signal.signal(signal.SIGINT, signal_handler)
+
+cfg = Config()
 cfg.UpdateIfNeeded()
+sensor = RangeChecker()
+sensor.Setup(cfg)
+
 print ('---Settings--')
 print (json.dumps(DefaultEncoder().encode(cfg)))
 print ('-------------')
