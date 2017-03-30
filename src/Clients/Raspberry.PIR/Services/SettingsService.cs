@@ -38,7 +38,7 @@ namespace Raspberry.PIR.Services
         {
             get
             {
-                if (!Guid.TryParse(_configuration.GetSection("Auth:")["AuthCode"], out Guid code))
+                if (!Guid.TryParse(_configuration.GetSection("Auth")["AuthCode"], out Guid code))
                 {
                     Console.WriteLine($"Invalid value of {nameof(AuthCode)}");
                 }

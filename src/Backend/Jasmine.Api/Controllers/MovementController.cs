@@ -16,15 +16,15 @@ namespace Jasmine.Api.Controllers
             _movementsService = movementsService;
         }
 
-        [HttpGet("api/movement/{deviceId:guid}/{page:int}/{limit:int}")]
-        public async Task<IActionResult> GetHistory([FromRoute]Guid deviceId, [FromRoute]int page, [FromRoute]int limit)
+        [HttpGet("api/movement/{deviceId:guid}")]
+        public async Task<IActionResult> GetHistory([FromRoute]Guid deviceId, [FromQuery]DateTime? since = null, [FromQuery]int page = 0, [FromQuery]int limit = 0)
         {
             if (Guid.Empty.Equals(deviceId))
             {
                 return BadRequest();
             }
 
-            MovementHistory history = await _movementsService.GetHistoryForDeviceAsync(deviceId, page, limit);
+            MovementHistory history = await _movementsService.GetHistoryForDeviceAsync(deviceId, since, page, limit);
             return Ok(history);
         }
 

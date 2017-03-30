@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Raspberry.PIR.Http;
 using Raspberry.PIR.Models;
 using Raspberry.PIR.Services.GPIO;
@@ -54,7 +55,7 @@ namespace Raspberry.PIR.Services
 
                 using (IHttpClient httpClient = new SimpleHttpClient())
                 {
-                    await httpClient.PostJsonAsync(_settingsService.MovementEndpointUrl, movementData);
+                    await httpClient.PostJsonAsync(_settingsService.MovementEndpointUrl, movementData, new[] { KeyValuePair.Create("Code", _settingsService.AuthCode.ToString()) });
                     Console.WriteLine("Done");
                 }
             }

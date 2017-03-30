@@ -9,7 +9,7 @@ namespace Jasmine.Api.Services
     {
         Task AddMovementAsync(MovementChangedData movementData);
 
-        Task<MovementHistory> GetHistoryForDeviceAsync(Guid deviceId, int page, int limit);
+        Task<MovementHistory> GetHistoryForDeviceAsync(Guid deviceId, DateTime? since, int page, int limit);
 
         Task<SensorActivity> GetSensorStatusAsync(Guid deviceId, SensorType type);
     }

@@ -25,9 +25,9 @@ namespace Jasmine.Api.Storage
             await _movementCollection.InsertOneAsync(action);
         }
 
-        public async Task<IEnumerable<MovementAction>> GetActionsByPageAsync(Guid deviceId, int pageNum, int pageSize)
+        public async Task<IEnumerable<MovementAction>> GetActionsByPageAsync(Guid deviceId, DateTime since, int pageNum, int pageSize)
         {
-            IAsyncCursor<MovementAction> all = await _movementCollection.FindAsync(d => d.DeviceId.Equals(deviceId));
+            IAsyncCursor<MovementAction> all = await _movementCollection.FindAsync(d => d.EntryDate > since && d.DeviceId.Equals(deviceId));
             List<MovementAction> allAsList = await all.ToListAsync();
 
             var page = allAsList.Skip(pageNum * pageSize);

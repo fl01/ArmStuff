@@ -20,8 +20,8 @@ namespace Jasmine.Api.Services
         {
             var action = new MovementAction()
             {
-                DeviceId= movementData.DeviceId,
-                EntryDate= movementData.EntryDate,
+                DeviceId = movementData.DeviceId,
+                EntryDate = movementData.EntryDate,
                 Sensor = movementData.Sensor,
                 Value = movementData.Value
             };
@@ -29,9 +29,9 @@ namespace Jasmine.Api.Services
             await _storage.AddAsync(action);
         }
 
-        public async Task<MovementHistory> GetHistoryForDeviceAsync(Guid deviceId, int page, int limit)
+        public async Task<MovementHistory> GetHistoryForDeviceAsync(Guid deviceId, DateTime? since, int page, int limit)
         {
-            IEnumerable<MovementAction> actions = await _storage.GetActionsByPageAsync(deviceId, page, limit);
+            IEnumerable<MovementAction> actions = await _storage.GetActionsByPageAsync(deviceId, since ?? default(DateTime), page, limit);
             long total = await _storage.GetMovementActionsCountAsync(deviceId);
 
             return new MovementHistory(total, actions);

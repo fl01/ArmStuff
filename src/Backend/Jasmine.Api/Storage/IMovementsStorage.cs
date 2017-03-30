@@ -10,7 +10,7 @@ namespace Jasmine.Api.Storage
     {
         Task AddAsync(MovementAction action);
 
-        Task<IEnumerable<MovementAction>> GetActionsByPageAsync(Guid deviceId, int pageNum, int pageSize);
+        Task<IEnumerable<MovementAction>> GetActionsByPageAsync(Guid deviceId, DateTime since, int pageNum, int pageSize);
 
         Task<long> GetMovementActionsCountAsync(Guid deviceId);
 
