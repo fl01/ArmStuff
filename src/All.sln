@@ -7,6 +7,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Raspberry.PIR", "Clients\Ra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jasmine.Api", "Backend\Jasmine.Api\Jasmine.Api.csproj", "{F6D083F2-589B-470C-B726-2745102F7E63}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Clients", "Clients", "{5A1C1FF4-012A-4C6A-B78E-F30236419ACA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UltraRange", "UltraRange", "{378D1002-4E72-4B0D-AEDC-993D7B62A95C}"
+	ProjectSection(SolutionItems) = preProject
+		Clients\UltraRange\config.cfg = Clients\UltraRange\config.cfg
+		Clients\UltraRange\range.py = Clients\UltraRange\range.py
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +32,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{61C9EDD3-190B-4F66-9BD0-DECC9156C9D1} = {5A1C1FF4-012A-4C6A-B78E-F30236419ACA}
+		{378D1002-4E72-4B0D-AEDC-993D7B62A95C} = {5A1C1FF4-012A-4C6A-B78E-F30236419ACA}
 	EndGlobalSection
 EndGlobal

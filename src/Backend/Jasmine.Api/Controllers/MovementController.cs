@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Jasmine.Api.Auth;
 using Jasmine.Api.Models;
 using Jasmine.Api.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -28,6 +29,7 @@ namespace Jasmine.Api.Controllers
         }
 
         [HttpPost("api/movement")]
+        [CodeRequirement]
         public async Task<IActionResult> AddMovementRecord([FromBody] MovementChangedData movementData)
         {
             if (movementData == null || !ModelState.IsValid)

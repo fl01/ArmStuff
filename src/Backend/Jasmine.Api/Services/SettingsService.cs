@@ -12,6 +12,14 @@ namespace Jasmine.Api.Services
             _configuration = configuration;
         }
 
+        public Guid AuthCode
+        {
+            get
+            {
+                return _configuration.GetValue<Guid>("Auth:AuthCode");
+            }
+        }
+
         public string GetConnectionString()
         {
             return _configuration.GetConnectionString("MongoDb");
@@ -24,7 +32,7 @@ namespace Jasmine.Api.Services
 
         public TimeSpan GetSensorActivityExpiry()
         {
-            return (TimeSpan)_configuration.GetValue(typeof(TimeSpan), "SensorActivity:ExpiryTime", TimeSpan.FromSeconds(15));
+            return _configuration.GetValue<TimeSpan>("SensorActivity:ExpiryTime", TimeSpan.FromSeconds(15));
         }
     }
 }

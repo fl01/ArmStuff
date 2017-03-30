@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Jasmine.Api.Definitions;
 using Jasmine.Api.Extensions;
@@ -41,6 +42,7 @@ namespace Jasmine.Api.Services
 
             return new DeviceStatus()
             {
+                DeviceInfo = Devices.All.FirstOrDefault(f => f.ID.Equals(deviceId)),
                 Status = status,
                 LastActivity = GetMinDate(pirActivity?.EntryDate, rangeActivity?.EntryDate)
             };
@@ -53,7 +55,6 @@ namespace Jasmine.Api.Services
             foreach (Device device in Devices.All)
             {
                 DeviceStatus status = await GetExactDeviceStatus(device.ID);
-                status.DeviceInfo = device;
                 devices.Add(status);
             }
 
