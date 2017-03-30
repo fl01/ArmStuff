@@ -37,6 +37,11 @@ namespace Jasmine.Api
                     IMongoClient client = new MongoClient(settingsService.GetConnectionString());
                     return client.GetDatabase(settingsService.GetMovementsDbName());
                 });
+            
+            services.AddCors(options =>
+                options.AddPolicy("AllowAllOrigins",
+                    builder => { builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod(); }
+                ));
 
             services.AddMvc();
         }
@@ -45,6 +50,7 @@ namespace Jasmine.Api
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+            app.UseCors("AllowAllOrigins");
 
             app.UseMvc();
         }
