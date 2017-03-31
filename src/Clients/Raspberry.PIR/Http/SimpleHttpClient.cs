@@ -20,7 +20,7 @@ namespace Raspberry.PIR.Http
             _httpClient.Dispose();
         }
 
-        public Task<HttpResponseMessage> PostJsonAsync<T>(string url, T data, IEnumerable<KeyValuePair<string, string>> headers = null)
+        public async Task<HttpResponseMessage> PostJsonAsync<T>(string url, T data, IEnumerable<KeyValuePair<string, string>> headers = null)
         {
             if (string.IsNullOrEmpty(url))
             {
@@ -41,7 +41,14 @@ namespace Raspberry.PIR.Http
                 }
             }
 
-            return _httpClient.PostAsync(url, new StringContent(serializedData, Encoding.UTF8, "application/json"));
+            try
+            {
+                return await _httpClient.PostAsync(url, new StringContent(serializedData, Encoding.UTF8, "application/json"));
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }
