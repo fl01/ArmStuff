@@ -17,7 +17,10 @@ class DefaultEncoder(JSONEncoder):
 class HttpClient:
   def Post(self, cfg, data):
 	print (json.dumps(data))
-	requests.post(cfg.Endpoint, json.dumps(data), headers = {'Content-type':'application/json', 'Code':cfg.Code})
+	try:
+		requests.post(cfg.Endpoint, json.dumps(data), headers = {'Content-type':'application/json', 'Code':cfg.Code})
+	except:
+		print ("Http Error")
 
 class RangeChecker:
   def IsEmpty(self, cfg):
