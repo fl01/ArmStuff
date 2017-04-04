@@ -34,5 +34,10 @@ namespace Jasmine.Api.Services
         {
             return _configuration.GetValue<TimeSpan>("SensorActivity:ExpiryTime", TimeSpan.FromSeconds(15));
         }
+
+        public TimeSpan GetWatcherDelay()
+        {
+            return _configuration.GetValue<TimeSpan>("StatusWatcher:WatchDelay", TimeSpan.FromSeconds(1));
+        }
     }
 }

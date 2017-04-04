@@ -1,7 +1,24 @@
 ﻿@{
     ViewData["Title"] = "Status Page";
 }
-
-<div id="status">
-
-</div>
+<div id="status"></div>
+<script language="javascript" type="text/javascript">
+    var uri = "ws://192.168.157.93:5100/notifications";
+        function connect() {
+            socket = new WebSocket(uri);
+            socket.onopen = function(event) {
+                console.log("opened connection to " + uri);
+            };
+            socket.onclose = function(event) {
+                console.log("closed connection from " + uri);
+            };
+            socket.onmessage = function (event) {
+                document.getElementById("status").innerText = event.data;
+                console.log(event.data);
+            };
+            socket.onerror = function(event) {
+                console.log("error: " + event.data);
+            };
+        }
+        connect();
+</script>

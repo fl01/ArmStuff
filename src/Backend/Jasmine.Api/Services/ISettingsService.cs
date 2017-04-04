@@ -11,5 +11,7 @@ namespace Jasmine.Api.Services
         string GetConnectionString();
 
         string GetMovementsDbName();
+
+        TimeSpan GetWatcherDelay();
     }
 }
