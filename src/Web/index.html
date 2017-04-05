@@ -64,17 +64,20 @@
         font-size: 3vh;
     }
     
-    #title::after {
-        content: ' ';
-        display: block;
-        width: 15vh;
-        margin: 3vh auto 3vh auto;
-        height: 0.2vh;
+    #last-caption {
+        font-size: 2vh;
     }
     
     #last {
-        padding-bottom: 7vh;
-        color: lightgrey;
+        padding-bottom: 5vh;
+    }
+    
+    #logo {
+        height: 25vh;
+        width: 28vh;
+        filter: grayscale(100%) contrast(200%);
+        margin: 4vh auto;
+        padding-right: 1vh;
     }
     
     #selector {
@@ -86,44 +89,6 @@
         box-shadow: 0.1vw 0.1vw 0.5vw rgba(151, 0, 0, 0.65);
         border-radius: 50%;
         background: #FFFFFF;
-    }
-    
-    #circles {
-        margin: auto;
-    }
-    
-    #circle-inner {
-        width: 15vh;
-        margin: auto;
-        display: flex;
-        height: 15vh;
-        border: 0.2vw solid rgba(0, 0, 0, 0.12);
-        border-radius: 50%;
-    }
-    
-    #circle-inner img {
-        width: 10vh;
-        height: 9vh;
-        margin: auto;
-        filter: grayscale(100%);
-        padding-right: 0.5vh;
-    }
-    
-    #circle-middle {
-        width: 25vh;
-        margin: auto;
-        display: flex;
-        height: 25vh;
-        border: 0.2vw solid #f7f7f7;
-        border-radius: 50%;
-    }
-    
-    #circle-outer {
-        width: 35vh;
-        height: 35vh;
-        border: 0.2vw solid #fbfbfb;
-        border-radius: 50%;
-        display: flex;
     }
     
     #indicator #superscript {
@@ -182,17 +147,10 @@
     </div>
     <div id="foreground">
         <div id="status">
-            <p id="title">Record Union</br>WC</p>
-            <p id="last">Last time</br>used</p>
-            <div id="circles">
-                <div id="circle-outer">
-                    <div id="circle-middle">
-                        <div id="circle-inner">
-                            <img src="./logo.png" alt="">
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <p id="title">Record Union</br>WC</br>
+                </br><span id="last-caption">Last Access:</span></p>
+            <p id="last">It is still</br>fresh and clean =(</p>
+            <img id="logo" src="./logo.png" alt="">
             <div id="indicator">
                 <p id="superscript" />
                 <div id="occupiedness">
@@ -219,12 +177,6 @@
 
     var uri = "ws://192.168.157.93:5100/notifications";
     var socket = new WebSocket(uri);
-    // socket.onopen = function(event) {
-    //     console.log("opened connection to " + uri);
-    // };
-    // socket.onclose = function(event) {
-    //     console.log("closed connection from " + uri);
-    // };
     socket.onmessage = function(event) {
         var data = JSON.parse(event.data);
         var status = data.Status && 'occupied' || '';
@@ -233,10 +185,5 @@
         document.getElementById('indicator').className = status;
         document.getElementById('background').className = status;
     };
-    // socket.onerror = function(event) {
-    //     console.log("error: " + event.data);
-    // };
-
-
 }();
 </script>
