@@ -4,13 +4,13 @@
 <head>
     <meta charset="utf-8">
     <title>Record Union - WC</title>
-    <link href="https://fonts.googleapis.com/css?family=Advent+Pro" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Neucha" rel="stylesheet">
     <!-- Styles -->
     <style>
     body {
         margin: 0;
-        font-family: 'Advent Pro', sans-serif;
-        font-size: 3vh;
+        font-family: 'Neucha', cursive;
+        font-size: 4vh;
         color: black;
     }
     
@@ -23,6 +23,24 @@
         position: absolute;
         width: 100%;
         height: 100%;
+        transition: all 1s;
+        background: rgba(106, 163, 94, 0.65);
+    }
+    
+    #background::before {
+        content: ' ';
+        display: block;
+        width: 100%;
+        height: 100%;
+        background: -moz-radial-gradient(center, ellipse cover, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.9) 50%, rgba(255, 255, 255, 0.7) 72%, rgba(255, 255, 255, 0) 100%);
+        background: -webkit-radial-gradient(center, ellipse cover, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.9) 50%, rgba(255, 255, 255, 0.7) 72%, rgba(255, 255, 255, 0) 100%);
+        background: radial-gradient(ellipse at center, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.9) 50%, rgba(255, 255, 255, 0.7) 72%, rgba(255, 255, 255, 0) 100%);
+        filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#00ffffff', GradientType=1);
+    }
+    
+    #background.occupied {
+        transition: all 1s;
+        background: rgba(170, 97, 97, 0.65);
     }
     
     #background img {
@@ -43,7 +61,6 @@
     }
     
     #title {
-        padding-bottom: 10vh;
         font-size: 3vh;
     }
     
@@ -53,8 +70,11 @@
         width: 15vh;
         margin: 3vh auto 3vh auto;
         height: 0.2vh;
-        background: #ce3030;
-        box-shadow: 0.1vw 0.1vw 0.4vw rgba(151, 0, 0, 0.65);
+    }
+    
+    #last {
+        padding-bottom: 7vh;
+        color: lightgrey;
     }
     
     #selector {
@@ -77,8 +97,16 @@
         margin: auto;
         display: flex;
         height: 15vh;
-        border: 0.2vw solid #dbdbdb;
+        border: 0.2vw solid rgba(0, 0, 0, 0.12);
         border-radius: 50%;
+    }
+    
+    #circle-inner img {
+        width: 10vh;
+        height: 9vh;
+        margin: auto;
+        filter: grayscale(100%);
+        padding-right: 0.5vh;
     }
     
     #circle-middle {
@@ -86,23 +114,22 @@
         margin: auto;
         display: flex;
         height: 25vh;
-        border: 0.2vw solid #dbdbdb;
+        border: 0.2vw solid #f7f7f7;
         border-radius: 50%;
     }
     
     #circle-outer {
         width: 35vh;
         height: 35vh;
-        border: 0.2vw solid #dbdbdb;
+        border: 0.2vw solid #fbfbfb;
         border-radius: 50%;
         display: flex;
     }
     
     #indicator #superscript {
         transition: all 1s;
-        color: lightgrey;
         margin: 2vh;
-        padding-top: 10vh;
+        padding-top: 6vh;
     }
     
     #indicator #occupiedness {
@@ -120,9 +147,9 @@
         transition: all 1s;
     }
     
-    #indicator.not #occupiedness {
-        background: rgb(91, 205, 113) !important;
-        box-shadow: 0.1vw 0.1vw 0.5vw rgba(10, 83, 28, 0.65) !important;
+    #indicator #occupiedness {
+        background: rgb(91, 205, 113);
+        box-shadow: 0.1vw 0.1vw 0.5vw rgba(10, 83, 28, 0.65);
     }
     
     #indicator.occupied #occupiedness {
@@ -130,16 +157,18 @@
         box-shadow: 0.1vw 0.1vw 0.5vw rgba(151, 0, 0, 0.65);
     }
     
-    #indicator.not #superscript::before {
-        content: 'Empty' !important;
+    #indicator #superscript::before {
+        color: rgb(91, 205, 113);
+        content: 'Go for it!';
     }
     
     #indicator.occupied #superscript::before {
-        content: 'Occupied';
+        color: #ce3030;
+        content: 'Hold it, pal!';
     }
     
-    #indicator.not #occupiedness #selector {
-        left: 0.5vh !important;
+    #indicator #occupiedness #selector {
+        left: 0.5vh;
     }
     
     #indicator.occupied #occupiedness #selector {
@@ -154,14 +183,17 @@
     <div id="foreground">
         <div id="status">
             <p id="title">Record Union</br>WC</p>
+            <p id="last">Last time</br>used</p>
             <div id="circles">
                 <div id="circle-outer">
                     <div id="circle-middle">
-                        <div id="circle-inner"></div>
+                        <div id="circle-inner">
+                            <img src="./logo.png" alt="">
+                        </div>
                     </div>
                 </div>
             </div>
-            <div id="indicator" class="not occupied">
+            <div id="indicator">
                 <p id="superscript" />
                 <div id="occupiedness">
                     <div id="selector">
@@ -195,8 +227,11 @@
     // };
     socket.onmessage = function(event) {
         var data = JSON.parse(event.data);
-        var status = data.Status && 'occupied' || 'not occupied';
+        var status = data.Status && 'occupied' || '';
+        var last = data.LastActivity.split('Z')[0].split('T').join('</br>');
+        document.getElementById('last').innerHTML = last;
         document.getElementById('indicator').className = status;
+        document.getElementById('background').className = status;
     };
     // socket.onerror = function(event) {
     //     console.log("error: " + event.data);
