@@ -195,12 +195,9 @@
     // };
     socket.onmessage = function(event) {
         var data = JSON.parse(event.data);
-        console.log(data);
         var status = data.Status && 'occupied' || 'not occupied';
-        console.log(data.Status);
         document.getElementById('indicator').className = status;
     };
-    //socket.connect();
     // socket.onerror = function(event) {
     //     console.log("error: " + event.data);
     // };
