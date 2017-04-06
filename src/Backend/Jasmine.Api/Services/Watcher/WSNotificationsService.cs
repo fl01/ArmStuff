@@ -20,7 +20,13 @@ namespace Jasmine.Api.Services
                 return;
             }
 
-            await _wsHandler.SendMessageToAllAsync(JsonConvert.SerializeObject(deviceStatus));
+            try
+            {
+                await _wsHandler.SendMessageToAllAsync(JsonConvert.SerializeObject(deviceStatus));
+            }
+            catch (System.Exception)
+            {
+            }
         }
     }
 }

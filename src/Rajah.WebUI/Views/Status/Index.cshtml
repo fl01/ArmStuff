@@ -1,8 +1,6 @@
-﻿@{
-    ViewData["Title"] = "Status Page";
-}
-<div id="status"></div>
+﻿<div id="status"></div>
 <script language="javascript" type="text/javascript">
+
     var uri = "ws://192.168.157.93:5100/notifications";
         function connect() {
             socket = new WebSocket(uri);
